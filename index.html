@@ -107,16 +107,15 @@
       collection, addDoc, onSnapshot, query, orderBy, updateDoc
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // ✅ Firebase config (그대로 사용)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDEsSa0HwIZ44HWez0oOTtuNRvnX_eVU9U",
-      authDomain: "pick-gift.firebaseapp.com",
-      projectId: "pick-gift",
-      storageBucket: "pick-gift.firebasestorage.app",
-      messagingSenderId: "372503045664",
-      appId: "1:372503045664:web:b6d31074c9dee9a6dffe45",
-      measurementId: "G-Y5N46XNLH2"
-    };
+    // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC55dwMjZ97RguQU4h7Ku8Tpjh_X7be6yM",
+  authDomain: "food-fire-b6db8.firebaseapp.com",
+  projectId: "food-fire-b6db8",
+  storageBucket: "food-fire-b6db8.firebasestorage.app",
+  messagingSenderId: "824034193268",
+  appId: "1:824034193268:web:46016cdfbcd74402b24621"
+};
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
