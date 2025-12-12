@@ -25,68 +25,109 @@
       </div>
     </header>
 
-    <!-- 입력 영역 -->
-    <section class="bg-white rounded-2xl shadow-sm border p-4">
+    <!-- 탭 -->
+    <nav class="bg-white rounded-2xl shadow-sm border p-2 flex gap-2">
+      <button data-tab="tabMenus" class="tab-btn px-3 py-2 rounded-lg bg-slate-900 text-white">1) 메뉴 설정</button>
+      <button data-tab="tabNames" class="tab-btn px-3 py-2 rounded-lg hover:bg-slate-100">2) 이름 입력</button>
+      <button data-tab="tabResult" class="tab-btn px-3 py-2 rounded-lg hover:bg-slate-100">3) 결과 집계</button>
+      <span class="ml-auto text-sm text-slate-500" id="status"></span>
+    </nav>
+
+    <!-- 1) 메뉴 설정 -->
+    <section id="tabMenus" class="bg-white rounded-2xl shadow-sm border p-4 space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+        <div class="md:col-span-8">
+          <label class="block text-sm font-medium mb-1">메뉴 추가</label>
+          <input id="menuAddInput" class="w-full px-3 py-2 rounded-lg border" placeholder="예: 짜장면 / 짬뽕 / 탕수육" />
+          <p class="text-xs text-slate-500 mt-1">한 줄에 하나씩 입력해도 되고, 쉼표(,)로 구분해도 됩니다.</p>
+        </div>
+        <div class="md:col-span-4 flex gap-2">
+          <button id="menuAddBtn" class="flex-1 px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">메뉴 추가</button>
+          <button id="menuClearBtn" class="px-3 py-2 rounded-lg border hover:bg-slate-50">입력창 비우기</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-bold">메뉴 목록</h2>
+          <span id="menuCount" class="text-sm text-slate-600"></span>
+        </div>
+        <div class="max-h-[55vh] overflow-auto border rounded-xl">
+          <table class="w-full text-sm">
+            <thead class="sticky top-0 bg-slate-100">
+              <tr>
+                <th class="text-left p-2 w-16">#</th>
+                <th class="text-left p-2">메뉴명</th>
+                <th class="text-left p-2 w-28">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="menusTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) 이름 입력 -->
+    <section id="tabNames" class="hidden bg-white rounded-2xl shadow-sm border p-4 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
         <div class="md:col-span-4">
           <label class="block text-sm font-medium mb-1">이름</label>
           <input id="nameInput" class="w-full px-3 py-2 rounded-lg border" placeholder="예: 강대희" />
         </div>
-
         <div class="md:col-span-5">
-          <label class="block text-sm font-medium mb-1">메뉴</label>
-          <input id="menuInput" class="w-full px-3 py-2 rounded-lg border" placeholder="예: 불고기 / 비빔밥 / 돈까스" />
-          <p class="text-xs text-slate-500 mt-1">팁: 메뉴 표기는 동일하게(띄어쓰기/철자) 입력하면 집계가 더 정확해요.</p>
+          <label class="block text-sm font-medium mb-1">메뉴 선택</label>
+          <select id="menuSelect" class="w-full px-3 py-2 rounded-lg border">
+            <option value="">— 메뉴를 선택하세요 —</option>
+          </select>
+          <p class="text-xs text-slate-500 mt-1">필요한 메뉴가 없다면 아래 ‘빠른 메뉴 추가’로 넣을 수 있어요.</p>
         </div>
-
         <div class="md:col-span-3 flex gap-2">
-          <button id="addBtn" class="flex-1 px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
-            입력
-          </button>
-          <button id="quickClearBtn" class="px-3 py-2 rounded-lg border hover:bg-slate-50">
-            비우기
-          </button>
+          <button id="addEntryBtn" class="flex-1 px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">입력</button>
+          <button id="quickClearBtn" class="px-3 py-2 rounded-lg border hover:bg-slate-50">비우기</button>
         </div>
       </div>
 
-      <p id="status" class="text-sm text-slate-600 mt-3"></p>
-    </section>
+      <div class="flex gap-2 items-end">
+        <div class="flex-1">
+          <label class="block text-sm font-medium mb-1">빠른 메뉴 추가</label>
+          <input id="quickMenuInput" class="w-full px-3 py-2 rounded-lg border" placeholder="예: 김치볶음밥" />
+        </div>
+        <button id="quickMenuBtn" class="px-3 py-2 rounded-lg border hover:bg-slate-50">추가</button>
+      </div>
 
-    <main class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-      <!-- 입력 리스트 -->
-      <section class="bg-white rounded-2xl shadow-sm border overflow-hidden lg:col-span-7">
-        <div class="p-4 border-b flex items-center justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold">입력 명단</h2>
           <span id="pendingCount" class="text-sm text-slate-600"></span>
         </div>
-
-        <div class="max-h-[65vh] overflow-auto">
+        <div class="max-h-[55vh] overflow-auto border rounded-xl">
           <table class="w-full text-sm">
             <thead class="sticky top-0 bg-slate-100">
               <tr>
                 <th class="text-left p-2 w-16">순번</th>
-                <th class="text-left p-2 w-36">이름</th>
-                <th class="text-left p-2">메뉴</th>
-                <th class="text-left p-2 w-28">완료</th>
+                <th class="text-left p-2 w-40">이름</th>
+                <th class="text-left p-2 w-56">메뉴</th>
+                <th class="text-left p-2 w-28">삭제</th>
               </tr>
             </thead>
             <tbody id="pendingTbody"></tbody>
           </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- 메뉴 집계 -->
-      <section class="bg-white rounded-2xl shadow-sm border overflow-hidden lg:col-span-5">
-        <div class="p-4 border-b flex items-center justify-between">
+    <!-- 3) 결과 집계 -->
+    <section id="tabResult" class="hidden bg-white rounded-2xl shadow-sm border p-4">
+      <div class="p-0 md:p-2">
+        <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold">메뉴별 집계</h2>
           <span id="menuTotal" class="text-sm text-slate-600"></span>
         </div>
-
-        <div class="max-h-[65vh] overflow-auto">
+        <div class="max-h-[65vh] overflow-auto border rounded-xl">
           <table class="w-full text-sm">
             <thead class="sticky top-0 bg-slate-100">
               <tr>
-                <th class="text-left p-2 w-28">수량</th>
+                <th class="text-left p-2 w-24">수량</th>
                 <th class="text-left p-2 w-40">메뉴</th>
                 <th class="text-left p-2">이름</th>
               </tr>
@@ -94,8 +135,8 @@
             <tbody id="menuTbody"></tbody>
           </table>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   </div>
 
   <script type="module">
@@ -104,33 +145,47 @@
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
     import {
       getFirestore, doc, setDoc, getDoc, serverTimestamp,
-      collection, addDoc, onSnapshot, query, orderBy, updateDoc
+      collection, addDoc, onSnapshot, query, orderBy, updateDoc, deleteDoc
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC55dwMjZ97RguQU4h7Ku8Tpjh_X7be6yM",
-  authDomain: "food-fire-b6db8.firebaseapp.com",
-  projectId: "food-fire-b6db8",
-  storageBucket: "food-fire-b6db8.firebasestorage.app",
-  messagingSenderId: "824034193268",
-  appId: "1:824034193268:web:46016cdfbcd74402b24621"
-};
+    // === Firebase config ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyC55dwMjZ97RguQU4h7Ku8Tpjh_X7be6yM",
+      authDomain: "food-fire-b6db8.firebaseapp.com",
+      projectId: "food-fire-b6db8",
+      storageBucket: "food-fire-b6db8.firebasestorage.app",
+      messagingSenderId: "824034193268",
+      appId: "1:824034193268:web:46016cdfbcd74402b24621"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ===== UI =====
+    // ===== Helpers & UI =====
     const $ = (id) => document.getElementById(id);
     const statusEl = $("status");
     const sessionLabelEl = $("sessionLabel");
 
-    const pendingTbody = $("pendingTbody");
-    const pendingCountEl = $("pendingCount");
+    const tabButtons = Array.from(document.querySelectorAll(".tab-btn"));
+    const tabs = {
+      tabMenus: $("tabMenus"),
+      tabNames: $("tabNames"),
+      tabResult: $("tabResult"),
+    };
 
-    const menuTbody = $("menuTbody");
-    const menuTotalEl = $("menuTotal");
+    function switchTab(tabId) {
+      Object.entries(tabs).forEach(([k, el]) => {
+        if (k === tabId) el.classList.remove("hidden");
+        else el.classList.add("hidden");
+      });
+      tabButtons.forEach(btn => {
+        btn.classList.toggle("bg-slate-900", btn.dataset.tab === tabId);
+        btn.classList.toggle("text-white", btn.dataset.tab === tabId);
+        btn.classList.toggle("hover:bg-slate-100", btn.dataset.tab !== tabId);
+      });
+    }
+    tabButtons.forEach(btn => btn.addEventListener("click", () => switchTab(btn.dataset.tab)));
 
     function setStatus(msg) { statusEl.textContent = msg || ""; }
 
@@ -140,29 +195,42 @@ const firebaseConfig = {
       }[c]));
     }
 
-    // 메뉴 입력 통일(앞뒤 공백 제거 + 연속 공백 1칸)
-    function normalizeMenu(menu) {
-      return String(menu ?? "")
-        .trim()
-        .replace(/\s+/g, " ");
-    }
+    const normalize = (s) => String(s ?? "").trim();
+    const normalizeMenu = (s) => String(s ?? "").trim().replace(/\s+/g, " ");
 
-    function normalizeName(name) {
-      return String(name ?? "").trim();
-    }
-
-    // ===== 데이터 구조 =====
+    // ===== Firestore 구조 =====
     // app/state : { currentSessionId, updatedAt }
     // sessions/{sessionId} : { createdAt }
-    // sessions/{sessionId}/entries/{entryId} : { name, menu, called, createdAt, calledAt }
+    // sessions/{sessionId}/menus/{menuId} : { label, createdAt }
+    // sessions/{sessionId}/entries/{entryId} : { name, selectedMenu(label), createdAt }
 
     const stateRef = doc(db, "app", "state");
     let currentSessionId = null;
-    let unsubscribeEntries = null;
 
-    // 중복 체크용 캐시
-    let cachedEntries = [];
+    // 캐시
+    let cachedMenus = [];   // {id, label}
+    let cachedEntries = []; // {id, name, selectedMenu}
 
+    // ===== DOM refs =====
+    const menuAddInput = $("menuAddInput");
+    const menuAddBtn = $("menuAddBtn");
+    const menuClearBtn = $("menuClearBtn");
+    const menusTbody = $("menusTbody");
+    const menuCountEl = $("menuCount");
+
+    const nameInput = $("nameInput");
+    const menuSelect = $("menuSelect");
+    const addEntryBtn = $("addEntryBtn");
+    const quickClearBtn = $("quickClearBtn");
+    const quickMenuInput = $("quickMenuInput");
+    const quickMenuBtn = $("quickMenuBtn");
+    const pendingTbody = $("pendingTbody");
+    const pendingCountEl = $("pendingCount");
+
+    const menuTbody = $("menuTbody");
+    const menuTotalEl = $("menuTotal");
+
+    // ===== 세션 보장 =====
     async function ensureState() {
       const snap = await getDoc(stateRef);
       if (!snap.exists() || !snap.data()?.currentSessionId) {
@@ -172,177 +240,244 @@ const firebaseConfig = {
       }
     }
 
-    function computeMenuStats(entries) {
-      // 메뉴별: count(인원수), names(Set)
-      const map = new Map();
+    // ===== 구독 =====
+    let unsubscribeMenus = null;
+    let unsubscribeEntries = null;
 
-      for (const e of entries) {
-        // 완료/미완료 상관 없이 집계하려면 그대로 두고,
-        // "대기만 집계" 하고 싶으면 if (e.called) continue; 를 넣으면 됨.
-        const menu = normalizeMenu(e.menu);
-        const name = normalizeName(e.name);
-        if (!menu || !name) continue;
-
-        if (!map.has(menu)) map.set(menu, { menu, count: 0, names: new Set() });
-        const obj = map.get(menu);
-        obj.count += 1;
-        obj.names.add(name);
-      }
-
-      // 수량 desc → 메뉴명 asc
-      return Array.from(map.values())
-        .sort((a, b) => (b.count - a.count) || a.menu.localeCompare(b.menu, "ko"));
-    }
-
-    function render(entries) {
-      // 입력 순서 유지
-      const list = entries.slice().sort((a, b) => {
-        // createdAt이 서버타임이라 초기에 null일 수 있어 fallback
-        const ta = a.createdAt?.seconds ?? 0;
-        const tb = b.createdAt?.seconds ?? 0;
-        if (ta !== tb) return ta - tb;
-        return (a._idx ?? 0) - (b._idx ?? 0);
-      });
-
-      // 입력 리스트(대기/완료 스타일만 다르게)
-      pendingTbody.innerHTML = list.map((e, idx) => `
-        <tr class="border-b last:border-b-0 ${e.called ? "opacity-70" : ""}">
-          <td class="p-2 text-slate-500">${idx + 1}</td>
-          <td class="p-2 font-medium ${e.called ? "line-through" : ""}">${safeText(e.name)}</td>
-          <td class="p-2 ${e.called ? "line-through" : ""}">${safeText(e.menu)}</td>
-          <td class="p-2">
-            ${e.called
-              ? `<button data-id="${e.id}" class="undoBtn px-2 py-1 rounded-md border hover:bg-slate-50">취소</button>`
-              : `<button data-id="${e.id}" class="doneBtn px-2 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700">완료</button>`
-            }
-          </td>
-        </tr>
-      `).join("");
-
-      pendingCountEl.textContent = `총 ${list.length}건`;
-
-      // 메뉴 집계
-      const stats = computeMenuStats(entries);
-      const totalCount = stats.reduce((sum, x) => sum + x.count, 0);
-      menuTotalEl.textContent = `총 ${totalCount}건 · 메뉴 ${stats.length}종`;
-
-      menuTbody.innerHTML = stats.map(s => {
-        const names = Array.from(s.names).sort((a, b) => a.localeCompare(b, "ko"));
-        return `
-          <tr class="border-b last:border-b-0 align-top">
-            <td class="p-2 font-bold">${s.count}</td>
-            <td class="p-2 font-medium">${safeText(s.menu)}</td>
-            <td class="p-2 text-slate-700">
-              <div class="flex flex-wrap gap-1">
-                ${names.map(n => `<span class="px-2 py-0.5 rounded-full bg-slate-100">${safeText(n)}</span>`).join("")}
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      wireRowButtons();
-    }
-
-    function wireRowButtons() {
-      pendingTbody.querySelectorAll(".doneBtn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.dataset.id;
-          await updateDoc(doc(db, "sessions", currentSessionId, "entries", id), {
-            called: true,
-            calledAt: serverTimestamp()
-          });
-        });
-      });
-
-      pendingTbody.querySelectorAll(".undoBtn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.dataset.id;
-          await updateDoc(doc(db, "sessions", currentSessionId, "entries", id), {
-            called: false,
-            calledAt: null
-          });
-        });
+    function subscribeMenus(sessionId) {
+      if (unsubscribeMenus) unsubscribeMenus();
+      const ref = collection(db, "sessions", sessionId, "menus");
+      const qy = query(ref, orderBy("createdAt", "asc"));
+      unsubscribeMenus = onSnapshot(qy, (snap) => {
+        cachedMenus = snap.docs.map((d, i) => ({ id: d.id, _idx: i, ...d.data() }))
+          .map(x => ({ id: x.id, label: normalizeMenu(x.label) }))
+          .filter(x => !!x.label);
+        renderMenus();
+        renderMenuSelectOptions();
+        renderResult(); // 메뉴 삭제 시 결과 즉시 반영
+      }, (err) => {
+        console.error(err);
+        setStatus("오류: 메뉴 목록을 불러오지 못했습니다.");
       });
     }
 
     function subscribeEntries(sessionId) {
       if (unsubscribeEntries) unsubscribeEntries();
-
-      const entriesRef = collection(db, "sessions", sessionId, "entries");
-      const q = query(entriesRef, orderBy("createdAt", "asc"));
-
-      unsubscribeEntries = onSnapshot(q, (snap) => {
-        const entries = snap.docs.map((d, i) => ({ id: d.id, _idx: i, ...d.data() }));
-        cachedEntries = entries;
-        render(entries);
+      const ref = collection(db, "sessions", sessionId, "entries");
+      const qy = query(ref, orderBy("createdAt", "asc"));
+      unsubscribeEntries = onSnapshot(qy, (snap) => {
+        cachedEntries = snap.docs.map((d, i) => ({ id: d.id, _idx: i, ...d.data() }))
+          .map(x => ({ id: x.id, name: normalize(x.name), selectedMenu: normalizeMenu(x.selectedMenu || "") }));
+        renderEntries();
+        renderResult();
         setStatus(`연결됨 · 세션 ${sessionId.slice(0, 8)} · ${new Date().toLocaleString()}`);
       }, (err) => {
         console.error(err);
-        setStatus("오류: Firestore 연결 실패. 규칙/권한/네트워크를 확인하세요.");
+        setStatus("오류: 명단을 불러오지 못했습니다.");
       });
     }
 
-    async function createNewSessionAndSwitch() {
+    // ===== 렌더링 =====
+    function renderMenus() {
+      menuCountEl.textContent = `총 ${cachedMenus.length}종`;
+      menusTbody.innerHTML = cachedMenus.map((m, idx) => `
+        <tr class="border-b last:border-b-0">
+          <td class="p-2 text-slate-500">${idx + 1}</td>
+          <td class="p-2 font-medium">${safeText(m.label)}</td>
+          <td class="p-2">
+            <button class="delMenuBtn px-2 py-1 rounded-md border hover:bg-slate-50" data-id="${m.id}">삭제</button>
+          </td>
+        </tr>
+      `).join("");
+
+      menusTbody.querySelectorAll(".delMenuBtn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.id;
+          // 이 메뉴를 선택한 엔트리가 있으면 선택값은 남기되, 결과 집계에서 없는 메뉴는 무시됨.
+          await deleteDoc(doc(db, "sessions", currentSessionId, "menus", id));
+        });
+      });
+    }
+
+    function renderMenuSelectOptions() {
+      const cur = menuSelect.value;
+      menuSelect.innerHTML = `<option value="">— 메뉴를 선택하세요 —</option>` +
+        cachedMenus.map(m => `<option value="${safeText(m.label)}">${safeText(m.label)}</option>`).join("");
+      // 기존 선택 유지
+      if (cur) menuSelect.value = cur;
+    }
+
+    function renderEntries() {
+      pendingCountEl.textContent = `총 ${cachedEntries.length}명`;
+      pendingTbody.innerHTML = cachedEntries.map((e, idx) => {
+        // 각 행마다 드롭다운(메뉴 선택 가능)
+        const opts = ['<option value="">— 선택 —</option>']
+          .concat(cachedMenus.map(m => `<option value="${safeText(m.label)}"${e.selectedMenu===m.label?' selected':''}>${safeText(m.label)}</option>`))
+          .join("");
+        return `
+          <tr class="border-b last:border-b-0">
+            <td class="p-2 text-slate-500">${idx + 1}</td>
+            <td class="p-2 font-medium">${safeText(e.name)}</td>
+            <td class="p-2">
+              <select class="rowMenuSelect w-full px-2 py-1 rounded-md border" data-id="${e.id}">${opts}</select>
+            </td>
+            <td class="p-2">
+              <button class="delEntryBtn px-2 py-1 rounded-md border hover:bg-slate-50" data-id="${e.id}">삭제</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      // 행 내 메뉴 변경 핸들러
+      pendingTbody.querySelectorAll(".rowMenuSelect").forEach(sel => {
+        sel.addEventListener("change", async () => {
+          const id = sel.dataset.id;
+          const value = normalizeMenu(sel.value);
+          await updateDoc(doc(db, "sessions", currentSessionId, "entries", id), {
+            selectedMenu: value
+          });
+        });
+      });
+
+      // 행 삭제
+      pendingTbody.querySelectorAll(".delEntryBtn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.id;
+          await deleteDoc(doc(db, "sessions", currentSessionId, "entries", id));
+        });
+      });
+    }
+
+    function computeMenuStats() {
+      // 현재 등록된 메뉴들만 집계 대상으로 삼음(없어진 메뉴는 결과에서 제외)
+      const validSet = new Set(cachedMenus.map(m => m.label));
+      const map = new Map();
+      for (const e of cachedEntries) {
+        const m = normalizeMenu(e.selectedMenu);
+        const n = normalize(e.name);
+        if (!m || !n) continue;
+        if (!validSet.has(m)) continue; // 없는 메뉴는 집계 제외
+        if (!map.has(m)) map.set(m, { menu: m, count: 0, names: [] });
+        const obj = map.get(m);
+        obj.count += 1;
+        obj.names.push(n);
+      }
+      const arr = Array.from(map.values())
+        .map(x => ({ ...x, names: Array.from(new Set(x.names)).sort((a,b)=>a.localeCompare(b,"ko")) }))
+        .sort((a,b)=> (b.count - a.count) || a.menu.localeCompare(b.menu,"ko"));
+      return arr;
+    }
+
+    function renderResult() {
+      const stats = computeMenuStats();
+      const total = stats.reduce((s, x) => s + x.count, 0);
+      menuTotalEl.textContent = `총 ${total}건 · 메뉴 ${stats.length}종`;
+
+      menuTbody.innerHTML = stats.map(s => `
+        <tr class="border-b last:border-b-0 align-top">
+          <td class="p-2 font-bold">${s.count}</td>
+          <td class="p-2 font-medium">${safeText(s.menu)}</td>
+          <td class="p-2 text-slate-700">
+            <div class="flex flex-wrap gap-1">
+              ${s.names.map(n => `<span class="px-2 py-0.5 rounded-full bg-slate-100">${safeText(n)}</span>`).join("")}
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    // ===== 동작 =====
+    async function addMenusFromText(text) {
+      const raw = String(text ?? "");
+      const parts = raw
+        .split(/\n|,/g)
+        .map(x => normalizeMenu(x))
+        .filter(Boolean);
+
+      if (!parts.length) return;
+
+      const menusRef = collection(db, "sessions", currentSessionId, "menus");
+      const existing = new Set(cachedMenus.map(m => m.label));
+      for (const label of parts) {
+        if (existing.has(label)) continue;
+        await addDoc(menusRef, { label, createdAt: serverTimestamp() });
+        existing.add(label);
+      }
+    }
+
+    // ===== 이벤트 바인딩 =====
+    menuAddBtn.addEventListener("click", async () => {
+      const txt = menuAddInput.value;
+      await addMenusFromText(txt);
+      menuAddInput.value = "";
+    });
+    menuClearBtn.addEventListener("click", () => { menuAddInput.value = ""; menuAddInput.focus(); });
+
+    quickMenuBtn.addEventListener("click", async () => {
+      const label = normalizeMenu(quickMenuInput.value);
+      if (!label) return;
+      await addMenusFromText(label);
+      quickMenuInput.value = "";
+      // 방금 추가한 메뉴가 선택박스에 바로 보이도록
+      renderMenuSelectOptions();
+    });
+
+    addEntryBtn.addEventListener("click", async () => {
+      const name = normalize(nameInput.value);
+      const selected = normalizeMenu(menuSelect.value);
+      if (!name || !selected) {
+        alert("이름과 메뉴를 선택해 주세요.");
+        return;
+      }
+      const entriesRef = collection(db, "sessions", currentSessionId, "entries");
+      await addDoc(entriesRef, {
+        name, selectedMenu: selected,
+        createdAt: serverTimestamp()
+      });
+      nameInput.value = "";
+      menuSelect.value = "";
+      nameInput.focus();
+    });
+
+    quickClearBtn.addEventListener("click", () => {
+      nameInput.value = "";
+      menuSelect.value = "";
+      nameInput.focus();
+    });
+
+    // Enter 단축
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") menuSelect.focus();
+    });
+    menuSelect.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addEntryBtn.click();
+    });
+    menuAddInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") menuAddBtn.click();
+    });
+    quickMenuInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") quickMenuBtn.click();
+    });
+
+    // 세션 리셋(비밀번호 0000)
+    $("resetBtn").addEventListener("click", async () => {
+      const pw = prompt("전체 초기화 비밀번호를 입력하세요.");
+      if (pw !== "0000") {
+        alert("비밀번호가 올바르지 않습니다.");
+        return;
+      }
+      const ok = confirm("정말 '전체 초기화(새 세션)' 하시겠습니까?\n(기존 데이터는 삭제되지 않고, 새 세션으로 전환됩니다.)");
+      if (!ok) return;
+
       const newId = crypto.randomUUID();
       await setDoc(doc(db, "sessions", newId), { createdAt: serverTimestamp() });
       await setDoc(stateRef, { currentSessionId: newId, updatedAt: serverTimestamp() }, { merge: true });
-    }
-
-    // ===== 이벤트 =====
-    $("addBtn").addEventListener("click", async () => {
-      const name = normalizeName($("nameInput").value);
-      const menu = normalizeMenu($("menuInput").value);
-
-      if (!name || !menu) {
-        alert("이름/메뉴를 입력해 주세요.");
-        return;
-      }
-
-      // ✅ 같은 (이름 + 메뉴) 중복 방지
-      const dup = cachedEntries.some(e =>
-        normalizeName(e.name) === name && normalizeMenu(e.menu) === menu
-      );
-      if (dup) {
-        alert("이미 입력되었습니다.");
-        return;
-      }
-
-      const entriesRef = collection(db, "sessions", currentSessionId, "entries");
-      await addDoc(entriesRef, {
-        name,
-        menu,
-        called: false,
-        createdAt: serverTimestamp(),
-        calledAt: null,
-      });
-
-      $("nameInput").value = "";
-      $("menuInput").value = "";
-      $("nameInput").focus();
-    });
-
-    $("quickClearBtn").addEventListener("click", () => {
-      $("nameInput").value = "";
-      $("menuInput").value = "";
-      $("nameInput").focus();
-    });
-
-    $("resetBtn").addEventListener("click", async () => {
-      const ok = confirm("정말 '전체 초기화(새 세션)' 할까요?\n(기존 데이터는 삭제되지 않고, 새 명단으로 전환됩니다.)");
-      if (!ok) return;
-      await createNewSessionAndSwitch();
-    });
-
-    // Enter 키로 입력
-    $("menuInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") $("addBtn").click();
-    });
-    $("nameInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") $("menuInput").focus();
+      // 탭을 1) 메뉴 설정로 이동
+      switchTab("tabMenus");
     });
 
     // ===== 시작 =====
+    switchTab("tabMenus");
     setStatus("로그인/연결 중...");
     await signInAnonymously(auth);
     await ensureState();
@@ -350,11 +485,11 @@ const firebaseConfig = {
     onSnapshot(stateRef, (snap) => {
       const data = snap.data();
       if (!data?.currentSessionId) return;
-
       const nextSessionId = data.currentSessionId;
       if (nextSessionId !== currentSessionId) {
         currentSessionId = nextSessionId;
         sessionLabelEl.textContent = `· 현재 세션: ${currentSessionId.slice(0, 8)}`;
+        subscribeMenus(currentSessionId);
         subscribeEntries(currentSessionId);
       }
     });
